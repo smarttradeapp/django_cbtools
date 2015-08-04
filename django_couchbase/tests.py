@@ -572,7 +572,7 @@ class CouchbaseModelTestCase(TestCase):
 
 class SyncGatewayTestCase(TestCase):
     def setUp(self):
-        from dashboard.management.commands.create_cb_views import Command
+        from django_couchbase.management.commands.create_cb_views import Command
 
         SyncGateway.put_admin_user()
         command = Command()
