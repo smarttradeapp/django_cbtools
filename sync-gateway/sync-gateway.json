@@ -1,0 +1,13 @@
+{
+    "adminInterface":"0.0.0.0:4985",
+    "databases": {
+        "django_couchbase": {
+            "server": "http://127.0.0.1:8091",
+            "bucket": "django_couchbase"
+        },
+        "django_couchbase_test": {
+            "server": "http://127.0.0.1:8091",
+            "bucket": "django_couchbase_test"
+        }
+    }
+}
