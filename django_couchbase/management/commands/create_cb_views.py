@@ -7,7 +7,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         import os
-        file_directory = os.path.realpath(settings.BASE_DIR + "/../deployment/couchbase_views/")
+        file_directory = os.path.realpath(settings.BASE_DIR + "/couchbase_views/")
 
         views = {}
         for filename in os.listdir(file_directory):
