@@ -17,7 +17,6 @@ def connection(reconnect=False):
         __COUCHBASE_CONNECTION__ = Couchbase.connect(bucket=settings.COUCHBASE_BUCKET,
                                                      host=settings.COUCHBASE_HOSTS,
                                                      password=settings.COUCHBASE_PASSWORD,
-                                                     timeout=120.0,
                                                      lockmode=LOCKMODE_WAIT)
 
     return __COUCHBASE_CONNECTION__
