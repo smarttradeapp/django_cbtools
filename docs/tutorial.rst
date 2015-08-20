@@ -18,7 +18,13 @@ The essential part of the package is models. They are inherited from django mode
 with almost all the benefits they have: can be validated with django forms and have fields
 all sort of field you are used to have.
 
+
+Creating Model
+==============
+
 Typical couchbase model class looks like that::
+
+    from django_couchnase.models import CouchbaseModel
 
     class CBArticle (CouchbaseModel):
         class Meta:
@@ -48,6 +54,96 @@ Certainly you can use all the rest types of fields. Let's review the code above.
   can easily define type of the document having just its ``uid``. Very useful.
 
 
-Configuration
-=============
+Getting Documents
+-----------------
+
+The document creation is a stright forward process::
+
+    article = CBArticle()
+    article.title = 'You & Couchbase'
+
+Or alternatively::
+
+    article = CBArticle(title='You & Couchbase')
+
+
+Saving Documents / Channels
+---------------------------
+
+Ideally it should be as simple as that::
+
+    article = CBArticle(title='Couchbase & You')
+    article.save()
+
+But if you do that you get exception::
+
+    CouchbaseModelError: Empty channels list can not be saved
+
+Channels. This is how ``sync-gateway`` limit access to documents
+to the documents for different mobile clients. The server side
+framework uses an admin user to create and save documents, so it has
+access to all of them, but we mind mobile clients also. So::
+
+    article = CBArticle(title='Couchbase & You', channels=['channel_name'])
+    article.save()
+
+or::
+
+    article = CBArticle(title='Couchbase & You')
+    article.append_channel('channel_name')
+    article.save()
+
+``channel_name`` is given here as an example. In real work it will
+probably somehow related to your users. For example, somewhere in a view::
+
+    article = CBArticle(title='Couchbase & You')
+    article.append_channel(self.request.user.username)
+    article.save()
+
+
+Load Documents
+--------------
+
+You usually load document if you have its ``UID``::
+
+    article = CBArticle('atl_0a1cf319ae4e8b3d5f8249fef9d1bb2c')
+    print article
+
+
+Load Related Documents
+----------------------
+
+This is how the model supports relations. Just a small helper method to load
+related object. In our example above it's an ``author`` document::
+
+    from django_couchbase.model import load_related_objects
+
+    article = CBArticle('atl_0a1cf319ae4e8b3d5f8249fef9d1bb2c')
+    load_related_objects([article], 'author', CBAuthor)
+    print article.author
+
+The function above just create another instance variable ``author`` with  loaded
+``CBAuthor`` document. By default it will check for ``UID`` in a filed with name
+``author_uid``.
+
+Please note, the function will make only one request to couchbase to load all
+the related documents for the given documents.
+
+
+Couchbase Indexes
+=================
+
+Coming soon...
+
+Creating Indexes
+----------------
+
+Coming soon...
+
+
+Index Helper Functions
+----------------------
+
+Coming soon...
+
 
