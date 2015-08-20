@@ -79,8 +79,8 @@ But if you do that you get exception::
 
     CouchbaseModelError: Empty channels list can not be saved
 
-Channels. This is how ``sync-gateway`` limit access to documents
-to the documents for different mobile clients. The server side
+Channels. This is how ``sync-gateway`` limit access to the documents
+for different mobile clients. The server side
 framework uses an admin user to create and save documents, so it has
 access to all of them, but we mind mobile clients also. So::
 
@@ -93,12 +93,15 @@ or::
     article.append_channel('channel_name')
     article.save()
 
-``channel_name`` is given here as an example. In real work it will
+``channel_name`` is given here as an example. In real world it will
 probably somehow related to your users. For example, somewhere in a view::
 
     article = CBArticle(title='Couchbase & You')
     article.append_channel(self.request.user.username)
     article.save()
+
+You can / should read some more about the concept of channels for
+``sync-gateway`` `here <http://developer.couchbase.com/mobile/develop/guides/sync-gateway/channels/index.html>`_.
 
 
 Load Documents
