@@ -26,7 +26,7 @@ Typical couchbase model class looks like that::
 
     from django_couchnase.models import CouchbaseModel
 
-    class CBArticle (CouchbaseModel):
+    class CBArticle(CouchbaseModel):
         class Meta:
             abstract = True
 
@@ -133,13 +133,31 @@ Please note, the function will make only one request to couchbase to load all
 the related documents for the given documents.
 
 
-Couchbase Indexes
-=================
+Couchbase Views
+===============
+
+Views in coachbase are JavaScript functions. You can read some more about it
+`here <http://docs.couchbase.com/admin/admin/Views/views-intro.html>`_
+as it's out of the scope of this document. Please do read the docs by the link,
+they are quite good.
+
+This package goes with two views: ``by_channel`` (the view which allows you
+to find documents by channel name and document type) and ``by_type`` which
+can be used to get documents of particular type.
+
+You can see the files of the views in folder ``couchbase_views/`` of the project.
+Those files are optional and if you don't need them, just don't copy them to your
+project.
+
+
+Creating Views
+--------------
 
 Coming soon...
 
-Creating Indexes
-----------------
+
+Deploying Views
+---------------
 
 Coming soon...
 
@@ -148,5 +166,4 @@ Index Helper Functions
 ----------------------
 
 Coming soon...
-
 
