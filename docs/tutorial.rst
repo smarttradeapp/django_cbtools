@@ -133,15 +133,31 @@ Please note, the function will make only one request to couchbase to load all
 the related documents for the given documents.
 
 
+Removing Documents
+------------------
+
+The package implements **soft** deletion of the documents. It means
+it just set ``st_deleted`` field of the document to ``True``.
+
+A periodic process has to be setup in order to really delete the documents
+when you really don't need them.
+
+There are two important points about ``st_deleted`` field:
+
+* ``st_deleted`` field is defined in every document you create within the package.
+  You don't have to define it explicitely.
+* You should take in account this fields when you create your views.
+  Probably you don't want to index the deleted documents.
+
+
 Couchbase Views
 ===============
 
 Views in coachbase are JavaScript functions. You can read some more about it
-`here <http://docs.couchbase.com/admin/admin/Views/views-intro.html>`_
-as it's out of the scope of this document. Please do read the docs by the link,
-they are quite good.
+in `couchbase documentation <http://docs.couchbase.com/admin/admin/Views/views-intro.html>`_
+as it's out of the scope of this document.
 
-This package goes with two views: ``by_channel`` (the view which allows you
+This package goes with two views in: ``by_channel`` (the view which allows you
 to find documents by channel name and document type) and ``by_type`` which
 can be used to get documents of particular type.
 
@@ -153,13 +169,36 @@ project.
 Creating Views
 --------------
 
-Coming soon...
+Firstly, create folder ``couchbase_views/`` in your project. Then create
+a ``js``-file with your view, for example to find all articles of by the author
+``couchbase_views/by_author.js``::
+
+    function (doc, meta) {
+        if (doc.st_deleted) {
+            // the document is deleted, nothing to index
+            return;
+        }
+        if (doc.doc_type != 'article') {
+            // it's not an article document, not for this index
+        }
+        emit(doc.author_uid, null)
+    }
+
+You also may want to create ``reduce`` function for your view. Then create yet another
+file with name ``by_author_reduce.js``::
+
+    _count
+
+Now your view has both ``map`` and ``reduce`` parts. The last one is optional.
 
 
 Deploying Views
 ---------------
 
-Coming soon...
+Your couchbase can not be used until they are not in couchbase server. To deploy them
+from command line you use command ``deploy_cb_views``::
+
+    # python manage.py deploy_cb_views
 
 
 Index Helper Functions
@@ -167,3 +206,14 @@ Index Helper Functions
 
 Coming soon...
 
+
+Testing
+-------
+
+There are several helper functions which you could find useful
+in your unit / intergration tests.
+
+Coming soon...
+
+When you write you tests you don't have to deploy the view to test database
+every time. Instead you deploy them in ``setUp`` function of your test classes.
