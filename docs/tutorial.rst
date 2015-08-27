@@ -201,10 +201,39 @@ from command line you use command ``deploy_cb_views``::
     # python manage.py deploy_cb_views
 
 
-Index Helper Functions
+Views Helper Functions
 ----------------------
 
-Coming soon...
+``query_view``
+~~~~~~~~~~~~~~
+
+.. method:: query_view(view_name, query_key, query=None)
+
+Search for ``query_key`` in a view ``view_name``. Return list of
+document ``uid`` s. Example::
+
+    import django_couchbase.models import query_view
+
+    uids = query_views('by_author', 'aut_5f8249fef9d1bb2c0a1cf319ae4e8b3d')
+    # uids now is list of articles
+
+
+Internally it builds a quiry for the view, but you can build a generic view
+and pass it to perform more complicated view query::
+
+    from couchbase.views.params import Query
+    import django_couchbase.models import query_view
+
+    # get all articles of these two authors
+    query = Query(
+        keys=['aut_8b3d5f8249fef9d1b', 'aut_f8249fef9d1b8b3d5'],
+        stale=get_stale()
+    )
+    uids = query_views(
+        'by_author',
+        query_key=None,  # will be ignored anyway
+        query=query
+    )
 
 
 Testing
