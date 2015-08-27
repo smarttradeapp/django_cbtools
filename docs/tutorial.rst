@@ -204,6 +204,14 @@ from command line you use command ``deploy_cb_views``::
 Views Helper Functions
 ----------------------
 
+``get_stale``
+~~~~~~~~~~~~~
+
+.. method:: get_stale()
+
+Coming soon...
+
+
 ``query_view``
 ~~~~~~~~~~~~~~
 
@@ -234,6 +242,18 @@ and pass it to perform more complicated view query::
         query_key=None,  # will be ignored anyway
         query=query
     )
+
+
+``query_objects``
+~~~~~~~~~~~~~~~~~
+
+.. method:: query_objects(view_name, query_key, class_name, query=None)
+
+Very similar to ``query_view``, but it returns list of object of
+given ``class_name`` instead just keys::
+
+    import django_couchbase.models import query_objects
+    objects = query_objects('by_author', 'aut_f8249fef9d1b8b3d5', CBAuthor)
 
 
 Testing
