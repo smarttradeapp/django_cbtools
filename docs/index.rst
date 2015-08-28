@@ -8,6 +8,7 @@ Contents:
 
    installation
    tutorial
+   settings
 
 
 Indices and tables

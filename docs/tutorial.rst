@@ -261,13 +261,41 @@ given ``class_name`` instead just keys::
     objects = query_objects('by_author', 'aut_f8249fef9d1b8b3d5', CBAuthor)
 
 
+``sync-gateway`` Users
+======================
+
+Coming soon...
+
+
+``SyncGateway`` Class
+---------------------
+
+Coming soon...
+
+
 Testing
--------
+=======
 
 There are several helper functions which you could find useful
 in your unit / intergration tests.
 
-Coming soon...
-
 When you write you tests you don't have to deploy the view to test database
 every time. Instead you deploy them in ``setUp`` function of your test classes.
+
+Your tests coulc look like that::
+
+    from django.test import TestCase
+
+    from django_couchbase.sync_gateway import SyncGateway
+    from django_couchbase.tests import clean_buckets
+
+    from dashboard.management.commands.create_cb_views import Command
+
+
+    class ArticleTest(TestCase):
+        def setUp(self):
+            super(ArticleTest, self).setUp()
+            SyncGateway.put_admin_user()
+            clean_buckets()
+            command = Command()
+            command.handle()

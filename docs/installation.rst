@@ -7,7 +7,7 @@ Installation
 Settings
 --------
 
-The following configuration settings are used for the package::
+The following configuration settings are used for the package (you can use the set below for the fast installation)::
 
     COUCHBASE_BUCKET = 'default'
     COUCHBASE_HOSTS = ['127.0.0.1']
@@ -21,6 +21,8 @@ The following configuration settings are used for the package::
     SYNC_GATEWAY_PASSWORD = "django_couchbase_admin_password"
     SYNC_GATEWAY_GUEST_USER = "django_couchbase_guest"
     SYNC_GATEWAY_GUEST_PASSWORD = "django_couchbase_guest_password"
+
+For more detals for settings see :ref:`ref-settings`.
 
 
 Requirements
