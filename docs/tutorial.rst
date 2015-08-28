@@ -209,7 +209,12 @@ Views Helper Functions
 
 .. method:: get_stale()
 
-Coming soon...
+Short hand for
+
+``settings.COUCHBASE_STALE if hasattr(settings, 'COUCHBASE_STALE') else STALE_OK``
+
+It means it just getter for your ``COUCHBASE_STALE`` option. Please
+read `more about it <http://docs.couchbase.com/admin/admin/Views/views-operation.html>`_ in the couchbase docs.
 
 
 ``query_view``
