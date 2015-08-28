@@ -275,6 +275,9 @@ class CouchbaseNestedModel(CouchbaseModel):
 
 
 def load_objects(keys, class_name):
+    """
+    Create list of objects of given class_name.
+    """
     json = sync_gateway.SyncGateway.all_docs(keys)
 
     objs = []
@@ -287,6 +290,10 @@ def load_objects(keys, class_name):
 
 
 def load_objects_dict(keys, class_name):
+    """
+    Creates dictionary (instead of list)
+    of obejct of given ``class_name``.
+    """
     json = sync_gateway.SyncGateway.all_docs(keys)
 
     objs = {}
@@ -313,8 +320,7 @@ def load_related_objects(objects, related_name, related_class, related_name_suff
 
 # moved functions
 def query_view(view_name, query_key, query=None):
-    stale = settings.COUCHBASE_STALE if hasattr(settings, 'COUCHBASE_STALE') else STALE_OK
-    query = query or Query(key=query_key, stale=stale)
+    query = query or Query(key=query_key, stale=get_stale())
     result = View(connection(), settings.COUCHBASE_DESIGN, view_name, query=query)
     result_keys = [x.docid for x in result if 'sync' not in x.docid]
     return result_keys
@@ -323,3 +329,7 @@ def query_view(view_name, query_key, query=None):
 def query_objects(view_name, query_key, class_name, query=None):
     result = query_view(view_name, query_key=query_key, query=query)
     return load_objects(result, class_name)
+
+
+def get_stale():
+    return settings.COUCHBASE_STALE if hasattr(settings, 'COUCHBASE_STALE') else STALE_OK
