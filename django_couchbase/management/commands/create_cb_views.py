@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
-from django_couchbase.connection import connection
 from django.conf import settings
+
+from django_couchbase.connection import connection
 
 
 class Command(BaseCommand):
