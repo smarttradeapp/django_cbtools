@@ -270,7 +270,10 @@ Coming soon...
 ``SyncGateway`` Class
 ---------------------
 
-Coming soon...
+At the moment sync-gateway does not have any "native" library
+to access, but it provides awesome REST HTTP interface. ``SyncGateway``
+class is just a simple wrapper to access this HTTP interface. Internally
+it uses `requests <http://docs.python-requests.org/en/latest/>`_ package.
 
 
 Testing
