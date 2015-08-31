@@ -6,13 +6,13 @@ Getting Started with Django Couchbase
 
 Django Couchbase is a wrapper around `couchbase <https://pypi.python.org/pypi/couchbase>`_
 python library plus several hook to
-`sync-gateway <http://developer.couchbase.com/mobile/develop/references/sync-gateway/rest-api/index.html>`_ API.
+`Sync-Gateway <http://developer.couchbase.com/mobile/develop/references/sync-gateway/rest-api/index.html>`_ API.
 
 The document search is perfomred using ``couchbase`` library (directly) connection
 to `couchbase server <http://www.couchbase.com/>`_,
 but saving and retrieving of the document is done using
-`sync-gateway HTTP API <http://developer.couchbase.com/mobile/develop/references/sync-gateway/rest-api/index.html>`_. This is done in order to have documents available for mobile
-clients, which can get all benefits of ``couchbase`` library only through ``sync-gateway``.
+`Sync-Gateway HTTP API <http://developer.couchbase.com/mobile/develop/references/sync-gateway/rest-api/index.html>`_. This is done in order to have documents available for mobile
+clients, which can get all benefits of ``couchbase`` library only through Sync-Gateway.
 
 The essential part of the package is models. They are inherited from django models
 with almost all the benefits they have: can be validated with django forms and have fields
@@ -79,7 +79,7 @@ But if you do that you get exception::
 
     CouchbaseModelError: Empty channels list can not be saved
 
-Channels. This is how ``sync-gateway`` limit access to the documents
+Channels. This is how Sync-Gateway limit access to the documents
 for different mobile clients. The server side
 framework uses an admin user to create and save documents, so it has
 access to all of them, but we mind mobile clients also. So::
@@ -101,7 +101,7 @@ probably somehow related to your users. For example, somewhere in a view::
     article.save()
 
 You can / should read some more about the concept of channels for
-``sync-gateway`` `here <http://developer.couchbase.com/mobile/develop/guides/sync-gateway/channels/index.html>`_.
+Sync-Gateway `here <http://developer.couchbase.com/mobile/develop/guides/sync-gateway/channels/index.html>`_.
 
 
 Load Documents
@@ -261,20 +261,57 @@ given ``class_name`` instead just keys::
     objects = query_objects('by_author', 'aut_f8249fef9d1b8b3d5', CBAuthor)
 
 
-``sync-gateway`` Users
-======================
+Sync-Gateway
+============
 
-Coming soon...
+Sync-Gateway Users
+------------------
+
+Django-couchbase need at least one Sync-Gateway user to created.
+The one which has full access to database::
+
+    SYNC_GATEWAY_USER = "django_couchbase_admin"
+    SYNC_GATEWAY_PASSWORD = "django_couchbase_admin_password"
+
+The library will access the database using the credentials from
+the settings above.
+
+If you are also working on mobile app creation you may want to have
+a `guest` user, the one which has access to a `public` documents
+(the documents in `public` channel).
+The `guest` user can be set like that::
+
+    SYNC_GATEWAY_GUEST_USER = "django_couchbase_guest"
+    SYNC_GATEWAY_GUEST_PASSWORD = "django_couchbase_guest_password"
+
+Sync-Gateway has a concept of a `GUEST` user, but we don't use it by many reasons.
+So your mobile client will create pull / push processes using
+the credentials above to access `public` documents. The library by itself
+does not use these credentials. But it has a management command to create this
+users in Sync-Gateway::
+
+    # ./manage.py create_sg_users
+
+The command above will create admin and guest user in Sync-Gateway.
+
+If you want to create a `public` document on server side you can do that::
+
+    from django_couchbase.models import CHANNEL_PUBLIC
+
+    article = CBArticle()
+    article.append_channel(CHANNEL_PUBLIC)
+    article.save()
 
 
 ``SyncGateway`` Class
 ---------------------
 
-At the moment sync-gateway does not have any "native" library
-to access, but it provides awesome REST HTTP interface. ``SyncGateway``
+At the moment Sync-Gateway does not have any "native" library
+to access it, but it provides awesome REST HTTP interface. ``SyncGateway``
 class is just a simple wrapper to access this HTTP interface. Internally
 it uses `requests <http://docs.python-requests.org/en/latest/>`_ package.
 
+Methods: coming soon...
 
 Testing
 =======
