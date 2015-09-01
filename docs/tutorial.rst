@@ -311,7 +311,12 @@ to access it, but it provides awesome REST HTTP interface. ``SyncGateway``
 class is just a simple wrapper to access this HTTP interface. Internally
 it uses `requests <http://docs.python-requests.org/en/latest/>`_ package.
 
-Methods: coming soon...
+``put_user``
+~~~~~~~~~~~~~~~~~~~
+
+.. method:: SyncGateway.put_user(username, email, password, admin_channels, disabled=False)
+
+A method to add a user to Sync-Gateway. Sync
 
 Testing
 =======
