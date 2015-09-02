@@ -316,7 +316,20 @@ it uses `requests <http://docs.python-requests.org/en/latest/>`_ package.
 
 .. method:: SyncGateway.put_user(username, email, password, admin_channels, disabled=False)
 
-A method to add a user to Sync-Gateway. Sync
+A statis method to add a user to Sync-Gateway.
+
+Usage::
+
+    from django_couchbase.sync_gateway import SyncGateway
+
+    SyncGateway.put_user('username', 'some@email.com', 'pass', ['user_channel'])
+
+
+``get_user``
+
+.. method:: SyncGateway.get_user(username)
+
+A static method...
 
 Testing
 =======
