@@ -329,7 +329,28 @@ Usage::
 
 .. method:: SyncGateway.get_user(username)
 
-A static method...
+A static method to get information about Sync-Gateway user.
+
+Usage::
+
+    from django_couchbase.sync_gateway import SyncGateway
+
+    print SyncGateway.get_user('username')
+
+
+``change_username``
+
+.. method:: SyncGateway.change_username(old_username, new_username, password)
+
+A static method to change the username of the user.
+
+
+``delete_user``
+
+.. method:: SyncGateway.delete_user(username)
+
+A static method to delete the username of the user.
+
 
 Testing
 =======
