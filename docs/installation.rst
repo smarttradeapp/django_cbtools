@@ -4,8 +4,39 @@
 Installation
 ============
 
-Settings
---------
+Pre-requisite
+-------------
+
+* working Couchbase server / cluster
+* working Sync-Gateway server
+
+
+Requirements
+------------
+
+* ``couchbase==2.0.2``
+* ``django-extensions==1.5.5``
+* ``django-tastypie==0.12.2``
+* ``requests==2.7.0``
+* ``shortuuid==0.4.2``
+
+``couchbase`` package installation can be tricky. A recipe for Ubuntu 12::
+
+    sudo wget -O/etc/apt/sources.list.d/couchbase.list http://packages.couchbase.com/ubuntu/couchbase-ubuntu1204.list
+
+    wget -O- http://packages.couchbase.com/ubuntu/couchbase.key | sudo apt-key add -
+
+    sudo apt-get update
+
+    sudo apt-get install libcouchbase-dev libcouchbase2-libevent
+
+
+Quick Install
+-------------
+
+Install package::
+
+    pip install git+https://github.com/smarttradeapp/django_couchbase.git
 
 The following configuration settings are used for the package (you can use the set below for the fast installation)::
 
@@ -23,12 +54,6 @@ The following configuration settings are used for the package (you can use the s
     SYNC_GATEWAY_GUEST_PASSWORD = "django_couchbase_guest_password"
 
 For more detals for settings see :ref:`ref-settings`.
-
-
-Requirements
-------------
-
-Coming soon...
 
 
 Testing
