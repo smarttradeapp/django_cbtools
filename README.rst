@@ -69,7 +69,7 @@ The following configuration settings are used for the package (you can use the s
     SYNC_GATEWAY_GUEST_USER = "django_couchbase_guest"
     SYNC_GATEWAY_GUEST_PASSWORD = "django_couchbase_guest_password"
 
-For more detals for settings see :ref:`ref-settings`.
+For more detals for settings see `settings <http://django-couchbase.readthedocs.org/en/latest/settings.html>`_.
 
 
 Testing
