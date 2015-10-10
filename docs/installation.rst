@@ -119,4 +119,4 @@ You will have to have at least one view-file in ``couchbase_views`` folder, ``by
 
 Now run tests as usual for django::
 
-    # python manage.py test --settings=<your-project>.test_settings django_couchbase
+    python manage.py test --settings=<your-project>.test_settings django_couchbase
