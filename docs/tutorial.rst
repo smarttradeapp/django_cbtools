@@ -24,7 +24,8 @@ Creating Model
 
 Typical couchbase model class looks like that::
 
-    from django_couchnase.models import CouchbaseModel
+    from django_couchbase.models import CouchbaseModel
+    from django.db import models
 
     class CBArticle(CouchbaseModel):
         class Meta:
@@ -149,6 +150,10 @@ There are two important points about ``st_deleted`` field:
 * You should take in account this fields when you create your views.
   Probably you don't want to index the deleted documents.
 
+So to set ``st_deleted`` to ``True`` you use ``delete()`` method::
+
+    article.delete()
+
 
 Couchbase Views
 ===============
@@ -198,7 +203,7 @@ Deploying Views
 Your couchbase can not be used until they are not in couchbase server. To deploy them
 from command line you use command ``deploy_cb_views``::
 
-    # python manage.py deploy_cb_views
+    python manage.py create_cb_views
 
 
 Views Helper Functions
@@ -290,7 +295,7 @@ the credentials above to access `public` documents. The library by itself
 does not use these credentials. But it has a management command to create this
 users in Sync-Gateway::
 
-    # ./manage.py create_sg_users
+    python manage.py create_sg_users
 
 The command above will create admin and guest user in Sync-Gateway.
 
