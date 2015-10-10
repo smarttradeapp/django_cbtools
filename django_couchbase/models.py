@@ -1,3 +1,4 @@
+from six import string_types
 import logging
 
 from django.db import models
@@ -72,7 +73,7 @@ class CouchbaseModel(models.Model):
 
         if len(args) == 1:
             v = args[0]
-            if isinstance(v, basestring):
+            if isinstance(v, string_types):
                 self.load(v)
 
     def append_to_references_list(self, key, value):
@@ -138,7 +139,7 @@ class CouchbaseModel(models.Model):
     def _date_from_string(self, field_name, val):
         try:
             setattr(self, field_name, dateparse.parse_datetime(val))
-        except Exception, e:
+        except Exception as e:
             setattr(self, field_name, val)
             logger.warning('can not parse date (raw value used) %s: %s', field_name, e)
 
@@ -151,7 +152,7 @@ class CouchbaseModel(models.Model):
     def _decimal_from_string(self, field_name, val):
         try:
             setattr(self, field_name, Decimal(val))
-        except Exception, e:
+        except Exception as e:
             setattr(self, field_name, val)
             logger.warning('can not parse decimal (raw value used) %s: %s', field_name, e)
 
