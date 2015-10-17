@@ -11,18 +11,18 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='django-couchbase',
+    name='django-cbtools',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
     version='1.0.0',
 
-    description='Simple models and views to work with couchbase in django applications.',
+    description='Simple models and views to work with Couchbase in Django applications.',
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/smarttradeapp/django_couchbase',
+    url='https://github.com/smarttradeapp/django_cbtools',
 
     # Author details
     author='Viacheslav Iutin',
@@ -61,10 +61,9 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     packages=[
-        'django_couchbase',
-        'django_couchbase.management',
-        'django_couchbase.management.commands',
-        # 'management.commands',
+        'django_cbtools',
+        'django_cbtools.management',
+        'django_cbtools.management.commands',
     ],
 
     # List run-time dependencies here.  These will be installed by pip when

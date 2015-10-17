@@ -36,29 +36,29 @@ Quick Install
 
 Install package::
 
-    pip install git+https://github.com/smarttradeapp/django_couchbase.git
+    pip install django-cbtools
 
 The following configuration settings are used for the package (you can use the set below for the fast installation)::
 
     COUCHBASE_BUCKET = 'default'
     COUCHBASE_HOSTS = ['127.0.0.1']
     COUCHBASE_PASSWORD = None
-    COUCHBASE_DESIGN = 'django_couchbase'
+    COUCHBASE_DESIGN = 'default'
     SYNC_GATEWAY_BUCKET = 'default'
     SYNC_GATEWAY_URL = 'http://127.0.0.1:4984'
     SYNC_GATEWAY_ADMIN_URL = 'http://127.0.0.1:4985'
-    SYNC_GATEWAY_USER = "django_couchbase_admin"
-    SYNC_GATEWAY_PASSWORD = "django_couchbase_admin_password"
-    SYNC_GATEWAY_GUEST_USER = "django_couchbase_guest"
-    SYNC_GATEWAY_GUEST_PASSWORD = "django_couchbase_guest_password"
+    SYNC_GATEWAY_USER = "demo_admin"
+    SYNC_GATEWAY_PASSWORD = "demo_admin_password"
+    SYNC_GATEWAY_GUEST_USER = "demo_guest"
+    SYNC_GATEWAY_GUEST_PASSWORD = "demo_guest_password"
 
 For more detals for settings see :ref:`ref-settings`.
 
-Add ``django_couchbase`` to ``INSTALLED_APPS``::
+Add ``django_cbtools`` to ``INSTALLED_APPS``::
 
     INSTALLED_APPS = (
         # ...
-        'django_couchbase',
+        'django_cbtools',
     )
 
 Create folder ``couchbase_views`` in the project root.
@@ -68,7 +68,7 @@ Testing
 -------
 
 You should create a testing couchbase bucket to run the package tests
-(and further your apps tests). For example ``django_couchbase_test``.
+(and further your apps tests). For example ``default_test``.
 
 The testing bucket must contain ``test`` in the name. Otherwise some
 helper functions will raise exception.
@@ -83,9 +83,9 @@ to take in account additional bucket, for example::
                 "server": "http://127.0.0.1:8091",
                 "bucket": "default"
             },
-            "django_couchbase_test": {
+            "default_test": {
                 "server": "http://127.0.0.1:8091",
-                "bucket": "django_couchbase_test"
+                "bucket": "default_test"
             }
         }
     }
@@ -98,12 +98,12 @@ The following settings should be changed in order to run Couchbase-related tests
 2. ``SYNC_GATEWAY_BUCKET`` is targetted to test bucket
 3. ``COUCHBASE_STALE`` is set to disable Couchbase caching
 
-Like that, in file ``test_settings.py``::
+Like that, in file ``settings_test.py``::
 
     # ...
-    COUCHBASE_BUCKET = 'django_couchbase_test'
+    COUCHBASE_BUCKET = 'default_test'
     COUCHBASE_STALE = False
-    SYNC_GATEWAY_BUCKET = 'django_couchbase_test'
+    SYNC_GATEWAY_BUCKET = 'default_test'
     # ...
 
 You will have to have at least one view-file in ``couchbase_views`` folder, ``by_channel.js``::
@@ -119,4 +119,4 @@ You will have to have at least one view-file in ``couchbase_views`` folder, ``by
 
 Now run tests as usual for django::
 
-    python manage.py test --settings=<your-project>.test_settings django_couchbase
+    python manage.py test --settings=<your-project>.settings_test django_cbtools

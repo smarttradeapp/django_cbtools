@@ -1,8 +1,8 @@
 .. _ref-tutorial:
 
-=====================================
-Getting Started with Django Couchbase
-=====================================
+===================================
+Getting Started with Django CBTools
+===================================
 
 Django Couchbase is a wrapper around `couchbase <https://pypi.python.org/pypi/couchbase>`_
 python library plus several hook to
@@ -24,7 +24,7 @@ Creating Model
 
 Typical couchbase model class looks like that::
 
-    from django_couchbase.models import CouchbaseModel
+    from django_cbtools.models import CouchbaseModel
     from django.db import models
 
     class CBArticle(CouchbaseModel):
@@ -48,7 +48,7 @@ Certainly you can use all the rest types of fields. Let's review the code above.
 * ``abstract = True`` this is to avoud django migration tool to take care about
   changes in the couchbase models.
 * ``doc_type = 'article'`` is the field you have to define. This is the way
-  django_couchbase stores the type of the objects. This value is stored in the
+  Django CBtools stores the type of the objects. This value is stored in the
   database.
 * ``uid_prefix = 'atl'`` this is an optional prefix for the ``uid`` of the document.
   Having prefix for the ``uid`` help a lot to debug the application. For example you
@@ -120,7 +120,7 @@ Load Related Documents
 This is how the model supports relations. Just a small helper method to load
 related object. In our example above it's an ``author`` document::
 
-    from django_couchbase.model import load_related_objects
+    from django_cbtools.model import load_related_objects
 
     article = CBArticle('atl_0a1cf319ae4e8b3d5f8249fef9d1bb2c')
     load_related_objects([article], 'author', CBAuthor)
@@ -230,7 +230,7 @@ read `more about it <http://docs.couchbase.com/admin/admin/Views/views-operation
 Search for ``query_key`` in a view ``view_name``. Return list of
 document ``uid`` s. Example::
 
-    import django_couchbase.models import query_view
+    import django_cbtools.models import query_view
 
     uids = query_views('by_author', 'aut_5f8249fef9d1bb2c0a1cf319ae4e8b3d')
     # uids now is list of articles
@@ -240,7 +240,7 @@ Internally it builds a quiry for the view, but you can build a generic view
 and pass it to perform more complicated view query::
 
     from couchbase.views.params import Query
-    import django_couchbase.models import query_view
+    import django_cbtools.models import query_view
 
     # get all articles of these two authors
     query = Query(
@@ -262,7 +262,7 @@ and pass it to perform more complicated view query::
 Very similar to ``query_view``, but it returns list of object of
 given ``class_name`` instead just keys::
 
-    import django_couchbase.models import query_objects
+    import django_cbtools.models import query_objects
     objects = query_objects('by_author', 'aut_f8249fef9d1b8b3d5', CBAuthor)
 
 
@@ -272,11 +272,11 @@ Sync-Gateway
 Sync-Gateway Users
 ------------------
 
-Django-couchbase need at least one Sync-Gateway user to created.
+Django-cbtools package needs at least one Sync-Gateway user.
 The one which has full access to database::
 
-    SYNC_GATEWAY_USER = "django_couchbase_admin"
-    SYNC_GATEWAY_PASSWORD = "django_couchbase_admin_password"
+    SYNC_GATEWAY_USER = "django_cbtools_admin"
+    SYNC_GATEWAY_PASSWORD = "django_cbtools_admin_password"
 
 The library will access the database using the credentials from
 the settings above.
@@ -286,8 +286,8 @@ a `guest` user, the one which has access to a `public` documents
 (the documents in `public` channel).
 The `guest` user can be set like that::
 
-    SYNC_GATEWAY_GUEST_USER = "django_couchbase_guest"
-    SYNC_GATEWAY_GUEST_PASSWORD = "django_couchbase_guest_password"
+    SYNC_GATEWAY_GUEST_USER = "django_cbtools_guest"
+    SYNC_GATEWAY_GUEST_PASSWORD = "django_cbtools_guest_password"
 
 Sync-Gateway has a concept of a `GUEST` user, but we don't use it by many reasons.
 So your mobile client will create pull / push processes using
@@ -301,7 +301,7 @@ The command above will create admin and guest user in Sync-Gateway.
 
 If you want to create a `public` document on server side you can do that::
 
-    from django_couchbase.models import CHANNEL_PUBLIC
+    from django_cbtools.models import CHANNEL_PUBLIC
 
     article = CBArticle()
     article.append_channel(CHANNEL_PUBLIC)
@@ -325,7 +325,7 @@ A statis method to add a user to Sync-Gateway.
 
 Usage::
 
-    from django_couchbase.sync_gateway import SyncGateway
+    from django_cbtools.sync_gateway import SyncGateway
 
     SyncGateway.put_user('username', 'some@email.com', 'pass', ['user_channel'])
 
@@ -338,7 +338,7 @@ A static method to get information about Sync-Gateway user.
 
 Usage::
 
-    from django_couchbase.sync_gateway import SyncGateway
+    from django_cbtools.sync_gateway import SyncGateway
 
     print SyncGateway.get_user('username')
 
@@ -370,8 +370,8 @@ Your tests coulc look like that::
 
     from django.test import TestCase
 
-    from django_couchbase.sync_gateway import SyncGateway
-    from django_couchbase.tests import clean_buckets
+    from django_cbtools.sync_gateway import SyncGateway
+    from django_cbtools.tests import clean_buckets
 
     from dashboard.management.commands.create_cb_views import Command
 

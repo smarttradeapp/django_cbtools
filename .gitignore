@@ -4,5 +4,6 @@
 _build
 *.deb
 .vagrant
-django_couchbase.egg-info
+django_cbtools.egg-info
 dist
+dist.sh

@@ -1,10 +1,15 @@
 .. _ref-settings:
 
-=========================
-Django-Couchbase Settings
-=========================
+=======================
+Django-Cbtools Settings
+=======================
 
-Full list of setting Django-Couchbase recognizes.
+Full list of setting Django-Cbtools recognizes.
+
+.. warning::
+
+    Please don't use username and password from the lines below!
+
 
 ``COUCHBASE_BUCKET``
 ====================
@@ -44,7 +49,7 @@ A name of design document where couchbase will store the views.
 
 An example::
 
-    COUCHBASE_DESIGN = 'django_couchbase'
+    COUCHBASE_DESIGN = 'design_doc_name'
 
 
 ``COUCHBASE_STALE``
@@ -101,7 +106,7 @@ The user which will be used to access the couchbase by your application.
 
 An example::
 
-    SYNC_GATEWAY_USER = "django_couchbase_admin"
+    SYNC_GATEWAY_USER = "admin"
 
 
 ``SYNC_GATEWAY_PASSWORD``
@@ -111,7 +116,7 @@ Password for the user above.
 
 An example::
 
-    SYNC_GATEWAY_PASSWORD = "django_couchbase_admin_password"
+    SYNC_GATEWAY_PASSWORD = "admin_password"
 
 
 ``SYNC_GATEWAY_GUEST_USER``
@@ -121,7 +126,7 @@ Guest user.
 
 An example::
 
-    SYNC_GATEWAY_GUEST_USER = "django_couchbase_guest"
+    SYNC_GATEWAY_GUEST_USER = "guest"
 
 
 ``SYNC_GATEWAY_GUEST_PASSWORD``
@@ -131,4 +136,4 @@ Password for the user above.
 
 An example::
 
-    SYNC_GATEWAY_GUEST_PASSWORD = "django_couchbase_guest_password"
+    SYNC_GATEWAY_GUEST_PASSWORD = "guest_password"

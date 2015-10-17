@@ -1,5 +1,5 @@
-Welcome to Django Couchbase's documentation!
-============================================
+Welcome to Django CBTools documentation!
+========================================
 
 Contents:
 
