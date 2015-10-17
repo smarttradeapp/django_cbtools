@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from django_couchbase.sync_gateway import SyncGateway
+from django_cbtools.sync_gateway import SyncGateway
 
 
 class Command(BaseCommand):
