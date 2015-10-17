@@ -1,7 +1,6 @@
 .DS_Store
 *.pyc
 *.sublime-workspace
-*.sublime-project
 _build
 *.deb
 .vagrant
