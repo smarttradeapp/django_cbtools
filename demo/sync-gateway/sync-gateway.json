@@ -5,9 +5,9 @@
             "server": "http://127.0.0.1:8091",
             "bucket": "default"
         },
-        "django_couchbase_test": {
+        "default_test": {
             "server": "http://127.0.0.1:8091",
-            "bucket": "django_couchbase_test"
+            "bucket": "default_test"
         }
     }
 }

@@ -103,15 +103,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # CouchBase Stuff
-COUCHBASE_BUCKET = 'cbtools_test'
+COUCHBASE_BUCKET = 'default_test'
 COUCHBASE_HOSTS = ['127.0.0.1']
 COUCHBASE_PASSWORD = None
-COUCHBASE_DESIGN = 'cbtools_test'
+COUCHBASE_DESIGN = 'default_test'
 COUCHBASE_STALE = False
-SYNC_GATEWAY_BUCKET = 'cbtools_test'
+SYNC_GATEWAY_BUCKET = 'default_test'
 SYNC_GATEWAY_URL = 'http://127.0.0.1:4984'
 SYNC_GATEWAY_ADMIN_URL = 'http://127.0.0.1:4985'
-SYNC_GATEWAY_USER = "cbtools_test_admin"
-SYNC_GATEWAY_PASSWORD = "cbtools_test_admin_password"
-SYNC_GATEWAY_GUEST_USER = "cbtools_test_guest"
-SYNC_GATEWAY_GUEST_PASSWORD = "cbtools_test_guest_password"
+SYNC_GATEWAY_USER = "test_admin"
+SYNC_GATEWAY_PASSWORD = "test_admin_password"
+SYNC_GATEWAY_GUEST_USER = "test_guest"
+SYNC_GATEWAY_GUEST_PASSWORD = "test_guest_password"
