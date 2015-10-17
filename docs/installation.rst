@@ -92,11 +92,11 @@ to take in account additional bucket, for example::
 
 Also you need an alternative ``settings.py`` to run tests. Probably you already have
 similar file to run your own tests. If you don't it's time to create it now.
-The following settings should be changed in order to run Couchbase-related tests properly::
+The following settings should be changed in order to run Couchbase-related tests properly:
 
 1. ``COUCHBASE_BUCKET`` is targetted to test bucket
-1. ``SYNC_GATEWAY_BUCKET`` is targetted to test bucket
-2. ``COUCHBASE_STALE`` is set to disable Couchbase caching
+2. ``SYNC_GATEWAY_BUCKET`` is targetted to test bucket
+3. ``COUCHBASE_STALE`` is set to disable Couchbase caching
 
 Like that, in file ``test_settings.py``::
 

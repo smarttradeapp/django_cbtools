@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_couchbase',
+    'django_cbtools',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -103,15 +103,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # CouchBase Stuff
-COUCHBASE_BUCKET = 'default'
+COUCHBASE_BUCKET = 'cbtools_test'
 COUCHBASE_HOSTS = ['127.0.0.1']
 COUCHBASE_PASSWORD = None
-COUCHBASE_DESIGN = 'django_couchbase'
+COUCHBASE_DESIGN = 'cbtools_test'
 COUCHBASE_STALE = False
-SYNC_GATEWAY_BUCKET = 'default'
+SYNC_GATEWAY_BUCKET = 'cbtools_test'
 SYNC_GATEWAY_URL = 'http://127.0.0.1:4984'
 SYNC_GATEWAY_ADMIN_URL = 'http://127.0.0.1:4985'
-SYNC_GATEWAY_USER = "django_couchbase_admin"
-SYNC_GATEWAY_PASSWORD = "django_couchbase_admin_password"
-SYNC_GATEWAY_GUEST_USER = "django_couchbase_guest"
-SYNC_GATEWAY_GUEST_PASSWORD = "django_couchbase_guest_password"
+SYNC_GATEWAY_USER = "cbtools_test_admin"
+SYNC_GATEWAY_PASSWORD = "cbtools_test_admin_password"
+SYNC_GATEWAY_GUEST_USER = "cbtools_test_guest"
+SYNC_GATEWAY_GUEST_PASSWORD = "cbtools_test_guest_password"

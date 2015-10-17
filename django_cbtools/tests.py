@@ -7,9 +7,9 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
-from django_couchbase import models as cbm
-from django_couchbase.models import query_objects, load_related_objects
-from django_couchbase.sync_gateway import SyncGateway, SyncGatewayException
+from django_cbtools import models as cbm
+from django_cbtools.models import query_objects, load_related_objects
+from django_cbtools.sync_gateway import SyncGateway, SyncGatewayException
 
 
 class Transaction(cbm.CouchbaseModel):

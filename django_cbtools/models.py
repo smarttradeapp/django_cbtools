@@ -1,3 +1,5 @@
+
+from decimal import Decimal
 from six import string_types
 import logging
 
@@ -14,10 +16,9 @@ from couchbase.views.params import Query, STALE_OK
 from tastypie.serializers import Serializer
 
 from django_extensions.db.fields import ShortUUIDField
-from decimal import Decimal
 
-from django_couchbase import sync_gateway
-from django_couchbase.connection import connection
+from django_cbtools import sync_gateway
+from django_cbtools.connection import connection
 
 logger = logging.getLogger(__name__)
 

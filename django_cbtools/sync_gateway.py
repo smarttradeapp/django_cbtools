@@ -1,8 +1,7 @@
+import json
 import logging
 import requests
 from requests.auth import HTTPBasicAuth
-
-import json
 
 from django.conf import settings
 

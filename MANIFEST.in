@@ -2,4 +2,3 @@ recursive-include docs *.py *.rst Makefile
 include AUTHORS
 include LICENSE
 include README.rst
-global-exclude .DS_Store
