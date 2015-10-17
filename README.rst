@@ -69,8 +69,6 @@ The following configuration settings are used for the package (you can use the s
     SYNC_GATEWAY_GUEST_USER = "demo_guest"
     SYNC_GATEWAY_GUEST_PASSWORD = "demo_guest_password"
 
-For more detals for settings see :ref:`ref-settings`.
-
 Add ``django_cbtools`` to ``INSTALLED_APPS``::
 
     INSTALLED_APPS = (

@@ -6,4 +6,3 @@ _build
 .vagrant
 django_cbtools.egg-info
 dist
-dist.sh
