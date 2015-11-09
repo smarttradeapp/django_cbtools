@@ -12,6 +12,10 @@ class SyncGatewayException(Exception):
     pass
 
 
+class SyncGatewayConflict(SyncGatewayException):
+    pass
+
+
 class SyncGateway(object):
     @staticmethod
     def put_user(username, email, password, admin_channels, disabled=False):
@@ -116,7 +120,13 @@ class SyncGateway(object):
             rev = document.rev if hasattr(document, 'rev') else 'n/a'
             logger.error('error on doc saving, status {}, revision {}, uid {}'.format(
                          response.status_code, rev, document.get_uid()))
-            raise SyncGatewayException("Can not save document %s, response code: %d" % (document, response.status_code))
+
+            msg = "Can not save document %s, response code: %d" % (document, response.status_code)
+
+            if response.status_code == 409:
+                raise SyncGatewayConflict(msg)
+
+            raise SyncGatewayException(msg)
 
         d = response.json()
 

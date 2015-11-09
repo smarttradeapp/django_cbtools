@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from django_cbtools import models as cbm
 from django_cbtools.models import query_objects, load_related_objects
-from django_cbtools.sync_gateway import SyncGateway, SyncGatewayException
+from django_cbtools.sync_gateway import SyncGateway, SyncGatewayException, SyncGatewayConflict
 
 
 class Transaction(cbm.CouchbaseModel):
@@ -626,3 +626,18 @@ class SyncGatewayTestCase(TestCase):
         d = SyncGateway.get_user("email@mail.com")
         self.assertEqual(d['name'], "email@mail.com")
         self.assertEqual(d['email'], "email@mail.com")
+
+    def test_409_exception(self):
+        o = Mock(title='title', channels=['boo'])
+        o.save()
+
+        o1 = Mock(o.uid)
+        o2 = Mock(o.uid)
+
+        o1.title = 'title 1'
+        o2.title = 'title 2'
+
+        o1.save()
+
+        with self.assertRaises(SyncGatewayConflict):
+            o2.save()
