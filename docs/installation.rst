@@ -43,7 +43,6 @@ The following configuration settings are used for the package (you can use the s
     COUCHBASE_BUCKET = 'default'
     COUCHBASE_HOSTS = ['127.0.0.1']
     COUCHBASE_PASSWORD = None
-    COUCHBASE_DESIGN = 'default'
     SYNC_GATEWAY_BUCKET = 'default'
     SYNC_GATEWAY_URL = 'http://127.0.0.1:4984'
     SYNC_GATEWAY_ADMIN_URL = 'http://127.0.0.1:4985'
@@ -51,8 +50,6 @@ The following configuration settings are used for the package (you can use the s
     SYNC_GATEWAY_PASSWORD = "demo_admin_password"
     SYNC_GATEWAY_GUEST_USER = "demo_guest"
     SYNC_GATEWAY_GUEST_PASSWORD = "demo_guest_password"
-
-For more detals for settings see :ref:`ref-settings`.
 
 Add ``django_cbtools`` to ``INSTALLED_APPS``::
 
@@ -105,17 +102,6 @@ Like that, in file ``settings_test.py``::
     COUCHBASE_STALE = False
     SYNC_GATEWAY_BUCKET = 'default_test'
     # ...
-
-You will have to have at least one view-file in ``couchbase_views`` folder, ``by_channel.js``::
-
-    function (doc, meta) {
-        if (doc.st_deleted) {
-            return;
-        }
-        for (channel in doc.channels) {
-            emit([doc.channels[channel], doc.doc_type], null)
-        }
-    }
 
 Now run tests as usual for django::
 

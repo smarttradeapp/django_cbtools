@@ -163,23 +163,3 @@ class SyncGateway(object):
     def get_auth():
         return HTTPBasicAuth(settings.SYNC_GATEWAY_USER,
                              settings.SYNC_GATEWAY_PASSWORD)
-
-
-# def ss():
-#     from .connection import connection
-#     c = connection()
-#     j = SyncGateway.all_docs(None, really_all=True)
-
-#     # r = []
-#     # print json
-#     for row in j['rows']:
-#         doc = row['doc']
-#         # print doc
-#         if 'doc_type' in doc and doc['doc_type'] == 'job':
-#             # print doc['doc_type']
-#             # continue
-#             if 'customer_uid' in doc:
-#                 if 'job' in doc['customer_uid']:
-#                     print doc['customer_uid']
-#                     c.delete(doc['customer_uid'])
-#                     print 'deleted'

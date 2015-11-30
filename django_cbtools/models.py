@@ -322,8 +322,9 @@ def load_related_objects(objects, related_name, related_class, related_name_suff
 
 # moved functions
 def query_view(view_name, query_key, query=None):
+    design, v = parse_view_name(view_name)
     query = query or Query(key=query_key, stale=get_stale())
-    result = View(connection(), settings.COUCHBASE_DESIGN, view_name, query=query)
+    result = View(connection(), design, v, query=query)
     result_keys = [x.docid for x in result if 'sync' not in x.docid]
     return result_keys
 
@@ -335,3 +336,10 @@ def query_objects(view_name, query_key, class_name, query=None):
 
 def get_stale():
     return settings.COUCHBASE_STALE if hasattr(settings, 'COUCHBASE_STALE') else STALE_OK
+
+
+def parse_view_name(view_name):
+    parts = view_name.split('/')
+    if len(parts) > 1:
+        return parts[0], parts[1]
+    return 'django_cbtools', parts[0]

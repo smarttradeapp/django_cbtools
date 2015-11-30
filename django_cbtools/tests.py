@@ -8,7 +8,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from django_cbtools import models as cbm
-from django_cbtools.models import query_objects, load_related_objects
+from django_cbtools.models import query_objects, load_related_objects, parse_view_name
 from django_cbtools.sync_gateway import SyncGateway, SyncGatewayException, SyncGatewayConflict
 
 
@@ -641,3 +641,16 @@ class SyncGatewayTestCase(TestCase):
 
         with self.assertRaises(SyncGatewayConflict):
             o2.save()
+
+
+class HelperFunctionsTestCase(TestCase):
+    def test_parse_view_name(self):
+        parts = parse_view_name('name')
+        self.assertEqual('django_cbtools', parts[0])
+        self.assertEqual('name', parts[1])
+        self.assertEqual(2, len(parts))
+
+        parts = parse_view_name('foo/bar')
+        self.assertEqual('foo', parts[0])
+        self.assertEqual('bar', parts[1])
+        self.assertEqual(2, len(parts))

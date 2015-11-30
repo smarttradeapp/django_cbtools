@@ -42,16 +42,6 @@ OR::
     COUCHBASE_PASSWORD = 'password'
 
 
-``COUCHBASE_DESIGN``
-====================
-
-A name of design document where couchbase will store the views.
-
-An example::
-
-    COUCHBASE_DESIGN = 'design_doc_name'
-
-
 ``COUCHBASE_STALE``
 ===================
 
