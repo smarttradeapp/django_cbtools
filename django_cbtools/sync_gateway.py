@@ -56,6 +56,17 @@ class SyncGateway(object):
         return response.json()
 
     @staticmethod
+    def get_users():
+        url = '%s/%s/_user/' % (settings.SYNC_GATEWAY_ADMIN_URL,
+                                settings.SYNC_GATEWAY_BUCKET)
+
+        response = requests.get(url, verify=False)
+        if response.status_code not in [200, 201]:
+            raise SyncGatewayException("Can not get users, response code: %d" % response.status_code)
+
+        return response.json()
+
+    @staticmethod
     def change_username(old_username, new_username, password):
         json_payload = SyncGateway.get_user(old_username)
         SyncGateway.delete_user(old_username)
