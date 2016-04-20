@@ -40,13 +40,16 @@ Requirements
 ``couchbase`` package installation can be tricky. A recipe for Ubuntu 12::
 
     sudo wget -O/etc/apt/sources.list.d/couchbase.list http://packages.couchbase.com/ubuntu/couchbase-ubuntu1204.list
-
     wget -O- http://packages.couchbase.com/ubuntu/couchbase.key | sudo apt-key add -
-
     sudo apt-get update
-
     sudo apt-get install libcouchbase-dev libcouchbase2-libevent
+    
+For Ubuntu 14::
 
+    sudo wget -O/etc/apt/sources.list.d/couchbase.list http://packages.couchbase.com/ubuntu/couchbase-ubuntu1404.list
+    wget -O- http://packages.couchbase.com/ubuntu/couchbase.key | sudo apt-key add -
+    sudo apt-get update
+    sudo apt-get install libcouchbase-dev libcouchbase2-libevent
 
 Quick Install
 -------------
