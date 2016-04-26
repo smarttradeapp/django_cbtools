@@ -17,7 +17,12 @@
         "flake8lint": {
             "python_interpreter": "/Users/slava/virtualenvs/smarttrade/bin/python",
             "gutter_marks": "circle",
-            "ignore": ["E501", "F403", "N802", "N806"]
+            "ignore": ["E501", "F403",
+                       "D100", "D101", "D102", "D103", "D105",
+                       "D200", "D202", "D203", "D204", "D205", "D208", "D210", "D211",
+                       "D400", "D401", "D403",
+                       "I100", "I101",
+                       "E731"]
         }
     }
 }

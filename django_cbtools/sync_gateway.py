@@ -18,28 +18,31 @@ class SyncGatewayConflict(SyncGatewayException):
 
 class SyncGateway(object):
     @staticmethod
-    def put_user(username, email, password, admin_channels, disabled=False):
+    def put_user(username, email=None, password=None, admin_channels=None, disabled=False):
         from .models import CHANNEL_PUBLIC
 
         url = '%s/%s/_user/%s' % (settings.SYNC_GATEWAY_ADMIN_URL,
                                   settings.SYNC_GATEWAY_BUCKET,
                                   username)
 
+        if admin_channels is None:
+            admin_channels = []
+
         if CHANNEL_PUBLIC not in admin_channels:
             admin_channels.append(CHANNEL_PUBLIC)
 
         dict_payload = dict(admin_channels=admin_channels,
                             disabled=disabled)
-        if email:
+        if email is None:
             dict_payload['email'] = email
 
-        if password:
+        if password is None:
             dict_payload['password'] = password
 
         json_payload = json.dumps(dict_payload)
         response = requests.put(url, data=json_payload, verify=False)
         if response.status_code not in [200, 201]:
-            raise SyncGatewayException("Can not create user, response code: %d" % response.status_code)
+            raise SyncGatewayException("Can not create / update sg-user, response code: %d" % response.status_code)
 
         return True
 
@@ -68,13 +71,17 @@ class SyncGateway(object):
 
     @staticmethod
     def change_username(old_username, new_username, password):
+        if old_username == new_username:
+            return False
+
         json_payload = SyncGateway.get_user(old_username)
+        SyncGateway.put_user(username=new_username,
+                             email=new_username,
+                             password=password,
+                             admin_channels=json_payload['admin_channels'],
+                             disabled=False)
         SyncGateway.delete_user(old_username)
-        return SyncGateway.put_user(username=new_username,
-                                    email=new_username,
-                                    password=password,
-                                    admin_channels=json_payload['admin_channels'],
-                                    disabled=False)
+        return True
 
     @staticmethod
     def delete_user(username):
@@ -87,6 +94,20 @@ class SyncGateway(object):
             raise SyncGatewayException("Can not delete user, response code: %d" % response.status_code)
 
         return True
+
+    @staticmethod
+    def append_channels(username, channels):
+        json_payload = SyncGateway.get_user(username)
+        new_channels = set(json_payload['admin_channels'])
+        new_channels.update(channels)
+        return SyncGateway.put_user(username=username, admin_channels=list(new_channels))
+
+    @staticmethod
+    def remove_channels(username, channels):
+        json_payload = SyncGateway.get_user(username)
+        new_channels = set(json_payload['admin_channels'])
+        new_channels.difference_update(channels)
+        return SyncGateway.put_user(username=username, admin_channels=list(new_channels))
 
     # def get_user(self, username):
     #     url = '%s/%s/_user/%s' % (settings.SYNC_GATEWAY_ADMIN_URL,

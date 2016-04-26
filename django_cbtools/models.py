@@ -1,7 +1,9 @@
-
+from datetime import datetime
 from decimal import Decimal
+import calendar
 from six import string_types
 import logging
+import pytz
 
 from django.db import models
 from django.forms.models import model_to_dict
@@ -245,12 +247,11 @@ class CouchbaseModel(models.Model):
         return u'%s: %s' % (self.uid, self.to_json())
 
     def __clean_kwargs(self, data):
-        clean_data = {}
-        all_names = self._meta.get_all_field_names()
-        for fname in data.keys():
-            if fname in all_names:
-                clean_data[fname] = data[fname]
-        return clean_data
+        common = set.intersection(
+            {f.name for f in self._meta.get_fields()},
+            data.keys(),
+        )
+        return {fname: data[fname] for fname in common}
 
 
 class CouchbaseNestedModel(CouchbaseModel):
@@ -284,9 +285,12 @@ def load_objects(keys, class_name):
 
     objs = []
     for row in json['rows']:
-        obj = class_name()
-        obj.from_sync_gateway_row(row)
-        objs.append(obj)
+        try:
+            obj = class_name()
+            obj.from_sync_gateway_row(row)
+            objs.append(obj)
+        except sync_gateway.SyncGatewayException as e:
+            logger.warning('Could not load key from database. Error : %s', str(e))
 
     return objs
 
@@ -300,9 +304,12 @@ def load_objects_dict(keys, class_name):
 
     objs = {}
     for row in json['rows']:
-        obj = class_name()
-        obj.from_sync_gateway_row(row)
-        objs[obj.uid] = obj
+        try:
+            obj = class_name()
+            obj.from_sync_gateway_row(row)
+            objs[obj.uid] = obj
+        except sync_gateway.SyncGatewayException as e:
+            logger.warning('Could not load key from database. Error : %s', str(e))
 
     return objs
 
@@ -325,7 +332,7 @@ def query_view(view_name, query_key, query=None):
     design, v = parse_view_name(view_name)
     query = query or Query(key=query_key, stale=get_stale())
     result = View(connection(), design, v, query=query)
-    result_keys = [x.docid for x in result if 'sync' not in x.docid]
+    result_keys = [x.docid for x in result]
     return result_keys
 
 
@@ -336,6 +343,33 @@ def query_objects(view_name, query_key, class_name, query=None):
 
 def get_stale():
     return settings.COUCHBASE_STALE if hasattr(settings, 'COUCHBASE_STALE') else STALE_OK
+
+
+def dt2ts(dt=None):
+    """Converts a datetime object to UTC timestamp
+    naive datetime will be considered UTC.
+    http://stackoverflow.com/a/5499906/444966
+    """
+    if not dt:
+        dt = timezone.now()
+
+    return calendar.timegm(dt.utctimetuple())
+
+
+def st2dt(stamp):
+    return datetime.utcfromtimestamp(int(stamp)).replace(tzinfo=pytz.utc)
+
+
+def try_else_return_none_obj(uid, model):
+    """
+    Try's to load uid in model else returns none
+    """
+    try:
+        obj = model(uid)
+    except Exception as e:
+        logger.warning('Could not load uid: {0} for model: {1} from database. Error : {2}'.format(uid, model, e))
+        obj = None
+    return obj
 
 
 def parse_view_name(view_name):

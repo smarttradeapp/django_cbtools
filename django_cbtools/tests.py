@@ -1,6 +1,7 @@
 import json
 from decimal import Decimal
 from datetime import datetime
+from uuid import uuid4
 
 from django.test import TestCase
 from django.db import models
@@ -8,7 +9,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from django_cbtools import models as cbm
-from django_cbtools.models import query_objects, load_related_objects, parse_view_name
+from django_cbtools.models import query_objects, load_related_objects, parse_view_name, load_objects
 from django_cbtools.sync_gateway import SyncGateway, SyncGatewayException, SyncGatewayConflict
 
 
@@ -102,6 +103,11 @@ class CouchbaseModelTestCase(TestCase):
 
     def tearDown(self):
         pass
+
+    def test_load_objects_empty_keys(self):
+        self.assertEqual(load_objects([], Job), [])
+        self.assertEqual(load_objects(None, Job), [])
+        self.assertEqual(load_objects('', Job), [])
 
     def test_eq(self):
         m1 = Mock()
@@ -592,6 +598,44 @@ class SyncGatewayTestCase(TestCase):
         m.channels.append(self.channel)
         m.save()
         self.uid2 = m.uid
+
+    def test_append_channels(self):
+        c = str(uuid4())
+        new_c1 = str(uuid4())
+        new_c2 = str(uuid4())
+        username = 'username1'
+        SyncGateway.put_user(
+            username,
+            "email@mail.com",
+            "password",
+            ["public", c]
+        )
+        SyncGateway.append_channels(username, [new_c1, new_c2])
+        d = SyncGateway.get_user(username)
+        self.assertIn(c, d['admin_channels'])
+        self.assertIn('public', d['admin_channels'])
+        self.assertIn(new_c1, d['admin_channels'])
+        self.assertIn(new_c2, d['admin_channels'])
+        self.assertEqual(4, len(d['admin_channels']))
+
+    def test_remove_channels(self):
+        c = str(uuid4())
+        new_c1 = str(uuid4())
+        new_c2 = str(uuid4())
+        username = 'username1'
+        SyncGateway.put_user(
+            username,
+            "email@mail.com",
+            "password",
+            ["public", c, new_c1, new_c2]
+        )
+        SyncGateway.remove_channels(username, [new_c1, new_c2])
+        d = SyncGateway.get_user(username)
+        self.assertIn(c, d['admin_channels'])
+        self.assertIn('public', d['admin_channels'])
+        self.assertNotIn(new_c1, d['admin_channels'])
+        self.assertNotIn(new_c2, d['admin_channels'])
+        self.assertEqual(2, len(d['admin_channels']))
 
     def test_query_objects(self):
         # import time

@@ -1,4 +1,5 @@
 recursive-include docs *.py *.rst Makefile
+recursive-include django_cbtools *.js
 include AUTHORS
 include LICENSE
 include README.rst
