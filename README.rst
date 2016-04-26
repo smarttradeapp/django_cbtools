@@ -2,18 +2,18 @@
 Django CBTools
 ==============
 
-Django CBTools is a wrapper around `couchbase <https://pypi.python.org/pypi/couchbase>`_
+Django CBTools is a wrapper around `Couchbase <https://pypi.python.org/pypi/couchbase>`_
 python library plus several hook to
 `Sync-Gateway <http://developer.couchbase.com/mobile/develop/references/sync-gateway/rest-api/index.html>`_ API.
 
-The document search is perfomred using ``couchbase`` library (directly) connection
+The document search is done using ``Couchbase`` library (directly) connection
 to `couchbase server <http://www.couchbase.com/>`_,
 but saving and retrieving of the document is done using
 `Sync-Gateway HTTP API <http://developer.couchbase.com/mobile/develop/references/sync-gateway/rest-api/index.html>`_. This is done in order to have documents available for mobile
-clients, which can get all benefits of ``couchbase`` library only through Sync-Gateway.
+clients, which can get all benefits of ``Couchbase`` library only through Sync-Gateway.
 
-The essential part of the package is models. They are inherited from django models
-with almost all the benefits they have: can be validated with django forms and have fields
+The essential part of the package is models. They are inherited from Django models
+with almost all the benefits they have: can be validated with Django forms and have fields
 all sort of field you are used to have.
 
 
@@ -40,13 +40,16 @@ Requirements
 ``couchbase`` package installation can be tricky. A recipe for Ubuntu 12::
 
     sudo wget -O/etc/apt/sources.list.d/couchbase.list http://packages.couchbase.com/ubuntu/couchbase-ubuntu1204.list
-
     wget -O- http://packages.couchbase.com/ubuntu/couchbase.key | sudo apt-key add -
-
     sudo apt-get update
-
     sudo apt-get install libcouchbase-dev libcouchbase2-libevent
+    
+For Ubuntu 14::
 
+    sudo wget -O/etc/apt/sources.list.d/couchbase.list http://packages.couchbase.com/ubuntu/couchbase-ubuntu1404.list
+    wget -O- http://packages.couchbase.com/ubuntu/couchbase.key | sudo apt-key add -
+    sudo apt-get update
+    sudo apt-get install libcouchbase-dev libcouchbase2-libevent
 
 Quick Install
 -------------

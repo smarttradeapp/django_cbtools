@@ -10,8 +10,6 @@ logger = logging.getLogger(__name__)
 class SingleObjectMixin(object):
 
     def get_object(self):
-        current_account = CBAccount.get_current(self.request)
-
         """
         Returns the object the view is displaying.
         By default this requires  a `pk`  argument
@@ -25,12 +23,7 @@ class SingleObjectMixin(object):
 
         if pk is not None:
             object = self.model(pk)
-            if set(current_account.channels).intersection(object.channels) and self.model.doc_type == object.doc_type:
-                return object
-            elif self.model == CBSmartTradeRecord and self.account.uid == object.partner_uid:
-                return object
-            else:
-                raise Http404
+            return object
         else:
             raise AttributeError("Generic detail view %s must be called with "
                                  "either an object pk ."
