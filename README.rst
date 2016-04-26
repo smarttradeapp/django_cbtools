@@ -31,11 +31,11 @@ Pre-requisite
 Requirements
 ------------
 
-* ``couchbase==2.0.2``
-* ``django-extensions==1.5.5``
+* ``couchbase==2.0.8``
+* ``django-extensions==1.6.1``
 * ``django-tastypie==0.12.2``
-* ``requests==2.7.0``
-* ``shortuuid==0.4.2``
+* ``requests==2.9.1``
+* ``shortuuid==0.4.3``
 
 ``couchbase`` package installation can be tricky. A recipe for Ubuntu 12::
 
@@ -43,7 +43,7 @@ Requirements
     wget -O- http://packages.couchbase.com/ubuntu/couchbase.key | sudo apt-key add -
     sudo apt-get update
     sudo apt-get install libcouchbase-dev libcouchbase2-libevent
-    
+
 For Ubuntu 14::
 
     sudo wget -O/etc/apt/sources.list.d/couchbase.list http://packages.couchbase.com/ubuntu/couchbase-ubuntu1404.list
