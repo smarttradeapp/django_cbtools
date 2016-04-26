@@ -16,7 +16,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.1.0',
+    version='1.2.0',
 
     description='Simple models and views to work with Couchbase in Django applications.',
     long_description=long_description,
@@ -71,11 +71,11 @@ setup(
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
-        'couchbase >= 2.0.2',
-        'django-extensions >= 1.5.5',
-        'django-tastypie >= 0.10.0',
-        'requests >= 2.7.0',
-        'shortuuid >= 0.4.2',
+        'couchbase >= 2.0.8',
+        'django-extensions >= 1.6.1',
+        'django-tastypie >= 0.12.2',
+        'requests >= 2.9.1',
+        'shortuuid >= 0.4.3',
     ],
 
     # List additional groups of dependencies here (e.g. development
