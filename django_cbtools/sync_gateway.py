@@ -33,10 +33,10 @@ class SyncGateway(object):
 
         dict_payload = dict(admin_channels=admin_channels,
                             disabled=disabled)
-        if email is None:
+        if email is not None:
             dict_payload['email'] = email
 
-        if password is None:
+        if password is not None:
             dict_payload['password'] = password
 
         json_payload = json.dumps(dict_payload)
