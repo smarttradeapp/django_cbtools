@@ -1,22 +1,25 @@
 from couchbase import Couchbase
-from couchbase.connection import *
+# from couchbase.bucket import Bucket
+from couchbase.connection import LOCKMODE_WAIT
 
 from django.conf import settings
 
-__COUCHBASE_CONNECTION__ = None
+
+def connection():
+    if not hasattr(connection, 'singleton'):
+        connection.singleton = Couchbase.connect(bucket=settings.COUCHBASE_BUCKET,
+                                                 host=settings.COUCHBASE_HOSTS,
+                                                 password=settings.COUCHBASE_PASSWORD,
+                                                 lockmode=LOCKMODE_WAIT)
+    return connection.singleton
 
 
-def connection(reconnect=False):
-
-    global __COUCHBASE_CONNECTION__
-
-    if reconnect:
-        __COUCHBASE_CONNECTION__ = None
-
-    if __COUCHBASE_CONNECTION__ is None:
-        __COUCHBASE_CONNECTION__ = Couchbase.connect(bucket=settings.COUCHBASE_BUCKET,
-                                                     host=settings.COUCHBASE_HOSTS,
-                                                     password=settings.COUCHBASE_PASSWORD,
-                                                     lockmode=LOCKMODE_WAIT)
-
-    return __COUCHBASE_CONNECTION__
+# using of Bucket lead to bugs ???
+# def connection():
+#     if not hasattr(connection, 'singleton'):
+#         connection.singleton = Bucket(
+#             settings.COUCHBASE_BUCKET,
+#             lockmode=LOCKMODE_WAIT,
+#             password=settings.COUCHBASE_PASSWORD
+#         )
+#     return connection.singleton
