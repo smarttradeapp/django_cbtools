@@ -357,6 +357,14 @@ A static method to change the username of the user.
 A static method to delete the username of the user.
 
 
+``create_session``
+
+.. method:: SyncGateway.create_session(username, ttl)
+
+A static method to create session for specified username.
+Returns response object where you can find content with session cookie and session id.
+
+
 Testing
 =======
 
