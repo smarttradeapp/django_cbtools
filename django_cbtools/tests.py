@@ -654,6 +654,17 @@ class SyncGatewayTestCase(TestCase):
         with self.assertRaises(SyncGatewayException):
             SyncGateway.get_user("email@mail.com")
 
+    def test_create_session(self):
+        SyncGateway.put_user("username1", "email@mail.com", "password", ["public"])
+        res = SyncGateway.create_session("username1")
+        self.assertEqual(res.status_code, 200)
+        res = SyncGateway.create_session("username1", ttl=60*60*24)
+        self.assertEqual(res.status_code, 200)
+
+    def test_create_session_for_non_existing_user(self):
+        with self.assertRaises(SyncGatewayException):
+            SyncGateway.create_session("not_existing_user")
+
     def test_change_username(self):
         res = SyncGateway.put_user("email@mail.com", "email@mail.com", "password", ["public", 'boo'])
         res = SyncGateway.change_username("email@mail.com", "other_email@mail.com", "password")

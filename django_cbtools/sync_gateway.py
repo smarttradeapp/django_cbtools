@@ -84,6 +84,24 @@ class SyncGateway(object):
         return True
 
     @staticmethod
+    def create_session(username, ttl=None):
+        url = '%s/%s/_session' % (settings.SYNC_GATEWAY_ADMIN_URL,
+                                  settings.SYNC_GATEWAY_BUCKET)
+
+        dict_payload = dict(name=username)
+
+        if ttl is not None:
+            dict_payload['ttl'] = ttl
+
+        json_payload = json.dumps(dict_payload)
+        response = requests.post(url, data=json_payload, verify=False)
+
+        if response.status_code != 200:
+            message = "Can not create session for sg-user (%s), response code: %d" % (username, response.status_code)
+            raise SyncGatewayException(message)
+        return response
+
+    @staticmethod
     def delete_user(username):
         url = '%s/%s/_user/%s' % (settings.SYNC_GATEWAY_ADMIN_URL,
                                   settings.SYNC_GATEWAY_BUCKET,
