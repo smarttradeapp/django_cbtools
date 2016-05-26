@@ -21,7 +21,7 @@ from django_extensions.db.fields import ShortUUIDField
 
 from django_cbtools import sync_gateway
 from django_cbtools.connection import connection
-
+from django_cbtools.signals import cb_pre_save, cb_post_save, cb_pre_delete, cb_post_delete
 logger = logging.getLogger(__name__)
 
 CHANNELS_FIELD_NAME = "channels"
@@ -178,6 +178,12 @@ class CouchbaseModel(models.Model):
         if not len(self.channels):
             raise CouchbaseModelError('Empty channels list can not be saved')
 
+        # Set is_new_document before save so we know if its a new document being saved
+        is_new_document = self.is_new()
+
+        # Send signal before save 
+        cb_pre_save.send(sender=self.__class__, instance=self)
+
         self.updated = timezone.now()
         if not hasattr(self, 'created') or self.created is None:
             self.created = self.updated
@@ -193,6 +199,9 @@ class CouchbaseModel(models.Model):
                     file_field.save(file_field.name, file_field, False)
 
         sync_gateway.SyncGateway.save_document(self)
+        
+        # Send signal document was saved, set is created to True if its a new document being saved
+        cb_post_save.send(sender=self.__class__, instance=self, created=is_new_document)
 
     def load(self, uid):
         d = sync_gateway.SyncGateway.all_docs([uid])
@@ -240,8 +249,10 @@ class CouchbaseModel(models.Model):
         """
         This is "soft delete" function. Not real one.
         """
+        cb_pre_delete.send(sender=self.__class__, instance=self)
         self.st_deleted = True
         self.save()
+        cb_post_delete.send(sender=self.__class__, instance=self)
 
     def __unicode__(self):
         return u'%s: %s' % (self.uid, self.to_json())

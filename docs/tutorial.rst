@@ -155,6 +155,89 @@ So to set ``st_deleted`` to ``True`` you use ``delete()`` method::
     article.delete()
 
 
+Document signals
+------------------
+
+The package includes a “signal dispatcher” this means you can get notified when actions such as a document
+is saved, updated or deleted.
+
+The django_cbtools.signals module defines a set of signals sent by the couchbase model system.
+
+``cb_pre_save``
+~~~~~~~~~~~~~
+
+This is sent at the beginning of a couchbase model’s save() method.
+
+Arguments sent with this signal:
+
+sender:
+The model class.
+
+instance:
+The actual instance being saved.
+
+``cb_post_save``
+~~~~~~~~~~~~~
+
+Like pre_save, but sent at the end of the save() method this signal also notifys if a document was saved.
+
+Arguments sent with this signal:
+
+sender:
+The model class.
+
+instance:
+The actual instance being saved.
+
+created:
+A boolean; True if a new document was created else False if existing document is saved.
+
+``cb_pre_delete``
+~~~~~~~~~~~~~
+
+Sent at the beginning of a document model’s delete().
+
+Arguments sent with this signal:
+
+sender:
+The model class.
+
+instance:
+The actual instance being deleted.
+
+``cb_post_delete``
+~~~~~~~~~~~~~
+
+Like pre_delete, but sent at the end of a model’s delete() method
+
+Arguments sent with this signal:
+
+sender:
+The model class.
+
+instance:
+The actual instance being deleted.
+
+``Listening to signals``
+~~~~~~~~~~~~~
+
+Here’s how you listen to a signal :::
+
+    from django_cbtools.signals import cb_pre_save, cb_post_save, cb_pre_delete, cb_post_delete
+
+    # Listen to cb_pre_save signal
+    cb_pre_save.connect(pre_save_handler, CBArticle)
+
+    # Listen to cb_post_save signal
+    cb_post_save.connect(post_save_handler, CBArticle)
+
+    # Listen to cb_pre_delete signal
+    cb_pre_delete.connect(pre_delete_handler, CBArticle)
+
+    # Listen to cb_post_delete signal
+    cb_post_delete.connect(post_delete_handler, CBArticle)
+
+
 Couchbase Views
 ===============
 

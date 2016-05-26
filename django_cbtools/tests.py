@@ -11,7 +11,7 @@ from django.utils import timezone
 from django_cbtools import models as cbm
 from django_cbtools.models import query_objects, load_related_objects, parse_view_name, load_objects
 from django_cbtools.sync_gateway import SyncGateway, SyncGatewayException, SyncGatewayConflict
-
+from django_cbtools.signals import cb_pre_save, cb_post_save, cb_pre_delete, cb_post_delete
 
 class Transaction(cbm.CouchbaseModel):
     class Meta:
@@ -686,6 +686,141 @@ class SyncGatewayTestCase(TestCase):
         with self.assertRaises(SyncGatewayConflict):
             o2.save()
 
+class CouchbaseModeSignals(TestCase):
+    def setUp(self):
+        SyncGateway.put_admin_user()
+        clean_buckets()
+        self.maxDiff = None
+
+    def test_cb_pre_save(self):
+        data = []
+
+        def pre_save_handler(signal, sender, instance, **kwargs):
+            data.append(
+                (instance, True)
+            )
+
+        cb_pre_save.connect(pre_save_handler, Mock)
+
+        m = Mock()
+        m.append_channel('foo')
+        m.save()
+
+        m2 = Mock()
+        m2.append_channel('boo')
+        m2.save()
+
+        self.assertEqual(data, [(m, True), (m2, True)])
+        self.assertEqual(len(data), 2)
+
+
+    def test_cb_post_save(self):
+        data = []
+
+        def post_save_handler(signal, sender, instance, created, **kwargs):
+            data.append(
+                (instance, created)
+            )
+
+        cb_post_save.connect(post_save_handler, Mock)
+
+        m = Mock()
+        m.append_channel('foo')
+        m.save()
+
+        m2 = Mock()
+        m2.append_channel('boo')
+        m2.save()
+
+        m2_updated = Mock(m2.uid)
+        m2_updated.title2 = 'updated'
+        m2_updated.save()
+
+        self.assertEqual(data, [(m, True), (m2, True), (m2_updated, False)])
+        self.assertEqual(len(data), 3)
+
+    def test_pre_and_post_save(self):
+        data = []
+
+        def pre_save_handler(signal, sender, instance, **kwargs):
+            data.append(
+                (instance, True)
+            )
+
+        def post_save_handler(signal, sender, instance, created, **kwargs):
+            data.append(
+                (instance, created)
+            )
+
+        cb_pre_save.connect(pre_save_handler, Mock)
+        cb_post_save.connect(post_save_handler, Mock)
+
+        m = Mock()
+        m.append_channel('foo')
+        m.save()
+
+        self.assertEqual(data, [(m, True), (m, True)])
+        self.assertEqual(len(data), 2)
+
+    def test_cb_pre_delete(self):
+        data = []
+
+        def pre_deleted_handler(signal, sender, instance, **kwargs):
+            data.append(
+                (instance, True)
+            )
+
+        cb_pre_delete.connect(pre_deleted_handler, Mock)
+
+        m = Mock()
+        m.append_channel('foo')
+        m.save()
+        m.delete()
+
+        self.assertEqual(data, [(m, True)])
+        self.assertEqual(len(data), 1)
+
+    def test_cb_post_delete(self):
+        data = []
+
+        def post_deleted_handler(signal, sender, instance, **kwargs):
+            data.append(
+                (instance, True)
+            )
+
+        cb_pre_delete.connect(post_deleted_handler, Mock)
+
+        m = Mock()
+        m.append_channel('foo')
+        m.save()
+        m.delete()
+
+        self.assertEqual(data, [(m, True)])
+        self.assertEqual(len(data), 1)
+
+    def test_pre_and_post_delete(self):
+        data = []
+
+        def pre_delete_handler(signal, sender, instance, **kwargs):
+            data.append(
+                (instance, True)
+            )
+
+        def post_delete_handler(signal, sender, instance, **kwargs):
+            data.append(
+                (instance, True)
+            )
+
+        cb_pre_delete.connect(pre_delete_handler, Mock)
+        cb_post_delete.connect(post_delete_handler, Mock)
+
+        m = Mock()
+        m.append_channel('foo')
+        m.save()
+        m.delete()
+
+        self.assertEqual(data, [(m, True), (m, True)])
+        self.assertEqual(len(data), 2)
 
 class HelperFunctionsTestCase(TestCase):
     def test_parse_view_name(self):
