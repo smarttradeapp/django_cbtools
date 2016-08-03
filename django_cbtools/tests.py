@@ -9,8 +9,10 @@ from django.conf import settings
 from django.utils import timezone
 
 from django_cbtools import models as cbm
-from django_cbtools.models import query_objects, load_related_objects, parse_view_name, load_objects
+from django_cbtools.models import query_objects, load_related_objects, \
+    parse_view_name, load_objects, query_view
 from django_cbtools.sync_gateway import SyncGateway, SyncGatewayException, SyncGatewayConflict
+from django_cbtools.paginator import CouchbasePaginator, CouchbasePage
 
 
 class Transaction(cbm.CouchbaseModel):
@@ -20,6 +22,14 @@ class Transaction(cbm.CouchbaseModel):
 
     title = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    @staticmethod
+    def get_user_paginator():
+        """
+        Example of pagination for arbitrary view
+        """
+        uids = query_view('by_channel', ['my_channel', Transaction.doc_type])
+        return CouchbasePaginator(uids, 15, model=Transaction)
 
 
 class Money(cbm.CouchbaseModel):
@@ -698,3 +708,50 @@ class HelperFunctionsTestCase(TestCase):
         self.assertEqual('foo', parts[0])
         self.assertEqual('bar', parts[1])
         self.assertEqual(2, len(parts))
+
+
+class PaginationTestCase(TestCase):
+    def setUp(self):
+        SyncGateway.put_admin_user()
+        clean_buckets()
+
+    def test_get_paginator(self):
+        m1 = Mock()
+        m1.append_channel('foo')
+        m1.save()
+
+        paginator = Mock.get_paginator()
+
+        self.assertTrue(isinstance(paginator, CouchbasePaginator))
+        self.assertEqual(paginator.object_list, [m1.uid])
+        self.assertEqual(paginator.model, Mock)
+
+    def test_paginator_get_page(self):
+        m1 = Mock()
+        m1.append_channel('foo')
+        m1.save()
+
+        paginator = Mock.get_paginator()
+        page = paginator.page(1)
+
+        self.assertTrue(isinstance(page, CouchbasePage))
+        self.assertEqual(page.object_list, [m1])
+
+    def test_get_user_paginator(self):
+        c = 'my_channel'
+        ts = []
+        for _ in range(0, 50):
+            t = Transaction(channels=[c])
+            t.save()
+            ts.append(t)
+        ts.sort(key=lambda x: x.uid)
+
+        for _ in range(0, 50):
+            t = Transaction(channels=['my_channel2'])
+            t.save()
+
+        paginator = Transaction.get_user_paginator()
+        page = paginator.page(2)
+
+        self.assertEqual(paginator.object_list, [i.uid for i in ts])
+        self.assertEqual(page.object_list, ts[15:30])

@@ -253,6 +253,12 @@ class CouchbaseModel(models.Model):
         )
         return {fname: data[fname] for fname in common}
 
+    @classmethod
+    def get_paginator(cls, per_page=15):
+        from django_cbtools.paginator import CouchbasePaginator
+        uids = query_view('by_type', getattr(cls, DOC_TYPE_FIELD_NAME))
+        return CouchbasePaginator(uids, per_page, model=cls)
+
 
 class CouchbaseNestedModel(CouchbaseModel):
     class Meta:
