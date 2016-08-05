@@ -45,7 +45,7 @@ Certainly you can use all the rest types of fields. Let's review the code above.
 * The class has a prefix ``CB``. It is optional. But you will probably have models
   related to your relational database. So to distinguish them we find it's useful
   to have this small prefix.
-* ``abstract = True`` this is to avoud django migration tool to take care about
+* ``abstract = True`` this is to avoid django migration tool to take care about
   changes in the couchbase models.
 * ``doc_type = 'article'`` is the field you have to define. This is the way
   Django CBtools stores the type of the objects. This value is stored in the
