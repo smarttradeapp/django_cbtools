@@ -1,5 +1,5 @@
 couchbase==2.0.8
-Django==1.11.23
+Django==1.11.29
 django-extensions==1.6.1
 django-tastypie==0.12.2
 meld3==1.0.2
